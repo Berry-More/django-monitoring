@@ -1,0 +1,46 @@
+{% extends 'sensors/base.html' %}
+
+{% block content %}
+
+<h1>Sensors main page</h1>
+
+<h3>Now working this sensors:</h3>
+
+<ul>
+    {% for i in sensors %}
+
+        <li><a href="{% url 'sensors:info' i.id%}">{{ i.name }}</a></li>
+    {% endfor %}
+</ul>
+
+<h3>Here illustrated how many measurements stations made</h3>
+
+<div>
+    <canvas id="bar-chart", height="100px"></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    const ctx = document.getElementById('bar-chart');
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: {{ names|safe }},
+        datasets: [{
+          label: 'Measurements',
+          data: {{ data|safe }},
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+</script>
+
+{% endblock %}
